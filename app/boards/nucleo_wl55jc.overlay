@@ -1,0 +1,14 @@
+/ {
+    leds {
+        red_led_3: led_2 {
+            gpios = <&gpiob 0xb GPIO_ACTIVE_HIGH >;
+        };
+    };
+
+    aliases {
+            led1 = &blue_led_1;   //* in deps/zephyr/boards/st/nucleo_wl55jc/nucleo_wl55jc.dts:68 */
+            led2 = &red_led_3;    //* in deps/zephyr/boards
+    };
+};
+
+
