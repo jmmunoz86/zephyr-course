@@ -1,0 +1,8 @@
+# Copyright (c) 2020 STMicroelectronics
+# SPDX-License-Identifier: Apache-2.0
+
+config BOARD_COPIED_BOARD
+	bool "Copied Board"
+	help
+	  This is the Copied Board board configuration.
+	select SOC_STM32WL55XX

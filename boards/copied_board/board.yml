@@ -1,0 +1,6 @@
+board:
+  name: copied_board
+  full_name: Copied Board
+  vendor: iomico
+  socs:
+    - name: stm32wl55xx
