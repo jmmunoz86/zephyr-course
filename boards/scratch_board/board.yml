@@ -1,0 +1,6 @@
+board:
+  name: scratch_board
+  full_name: My Board from scratch
+  vendor: iomico
+  socs:
+    - name: stm32wl55xx

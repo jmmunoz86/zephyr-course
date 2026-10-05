@@ -1,0 +1,5 @@
+config BOARD_SCRATCH_BOARD
+	bool "Scratch Board"
+	help
+	  This is the Scratch Board configuration.
+	select SOC_STM32WL55XX
