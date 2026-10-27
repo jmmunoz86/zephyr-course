@@ -1,0 +1,8 @@
+description: Our LED driver
+compatible: "our,driver"
+include: base.yaml
+properties:
+  led-gpios:
+    description: LED node
+    type: phandle-array
+    required: true

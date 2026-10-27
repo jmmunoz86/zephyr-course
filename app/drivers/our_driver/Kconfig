@@ -1,0 +1,5 @@
+config OUR_DRIVER
+    bool "Our Driver"
+    default y
+    depends on DT_HAS_OUR_DRIVER_ENABLED
+    depends on SENSOR && GPIO

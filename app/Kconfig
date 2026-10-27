@@ -12,3 +12,4 @@ config APP_HEARTBEAT_PERIOD_MS
 endif 
 
 source "Kconfig.zephyr"
+rsource "drivers/our_driver/Kconfig"

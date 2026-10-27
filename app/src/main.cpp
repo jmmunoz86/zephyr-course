@@ -1,16 +1,52 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
+#include <zephyr/drivers/sensor.h>
+#include <zephyr/device.h>
 
-/* The devicetree node identifier for the "led0" alias. */
-#define LED_NODE DT_ALIAS(app_led)
 
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED_NODE, gpios);
+const struct device *const my_device = DEVICE_DT_GET(DT_NODELABEL(our_driver0));
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
+
+
+namespace {
+    void test() {
+        const struct device *const driver = DEVICE_DT_GET(DT_NODELABEL(our_driver0));
+        struct sensor_value val;
+        auto ret = sensor_channel_get(driver, SENSOR_CHAN_AMBIENT_TEMP, &val);
+        LOG_INF("Channel ret %d", ret);
+    }
+}
+
 int main(void)
 {
+    struct sensor_value val; 
+
+    test();
+    
+    if (!device_is_ready(my_device)) {
+        LOG_ERR("Device our_driver0 not ready");
+        return -ENODEV;
+    }
+
+    while (1) {
+       int ret = sensor_sample_fetch(my_device);
+       if (ret < 0) {
+           LOG_ERR("Failed to fetch sensor sample: %d", ret);
+       }
+
+       k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
+       ret = sensor_channel_get(my_device, SENSOR_CHAN_AMBIENT_TEMP, &val);
+       if (ret < 0) {
+           LOG_ERR("Failed to get sensor channel: %d", ret);
+       }
+       k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
+    }
+
+    
+    /*
     bool led_state = true;
 
     if (!gpio_is_ready_dt(&led)) return 0;
@@ -25,4 +61,5 @@ int main(void)
         k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
     }
     return 0;
+    */
 }
