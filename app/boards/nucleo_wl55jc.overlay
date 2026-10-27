@@ -8,6 +8,7 @@
     aliases {
             led1 = &blue_led_1;   //* in deps/zephyr/boards/st/nucleo_wl55jc/nucleo_wl55jc.dts:68 */
             led2 = &red_led_3;    //* in deps/zephyr/boards
+            app-led = &green_led_2;  //* in deps/zephyr/boards/st/nucleo_wl55jc/nucleo_wl55jc.dts:70 */
     };
 };
 
