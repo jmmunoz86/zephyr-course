@@ -3,6 +3,7 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/device.h>
+#include "our_driver.h"
 
 
 const struct device *const my_device = DEVICE_DT_GET(DT_NODELABEL(our_driver0));
@@ -23,6 +24,7 @@ namespace {
 int main(void)
 {
     struct sensor_value val; 
+    uint32_t timer_value = 0;
 
     test();
     
@@ -37,12 +39,23 @@ int main(void)
            LOG_ERR("Failed to fetch sensor sample: %d", ret);
        }
 
-       k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
+       ret = our_driver_set_timer_increment(my_device, &timer_value);
+
+       if (ret == 0) {
+           LOG_INF("Timer value incremented to: %u", timer_value);
+
+       } else {
+           LOG_ERR("Failed to increment timer value: %d", ret);
+       }
+
+       k_msleep(timer_value);
+
        ret = sensor_channel_get(my_device, SENSOR_CHAN_AMBIENT_TEMP, &val);
        if (ret < 0) {
            LOG_ERR("Failed to get sensor channel: %d", ret);
        }
-       k_msleep(CONFIG_APP_HEARTBEAT_PERIOD_MS);
+
+       k_msleep(timer_value);
     }
 
     

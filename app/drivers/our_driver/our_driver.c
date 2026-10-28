@@ -2,6 +2,7 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/drivers/sensor.h>
+#include "our_driver.h"
 
 #define DT_DRV_COMPAT our_driver
 
@@ -9,11 +10,35 @@ LOG_MODULE_REGISTER(our_driver, LOG_LEVEL_INF);
 
 struct our_driver_data {
     int led_state;
+    uint32_t timer_value;
 };
 
 struct our_driver_config {
     struct gpio_dt_spec led_gpio;
 };
+
+int our_driver_set_timer_increment(const struct device *dev, uint32_t *timer_value)
+{
+
+    struct our_driver_data *data = dev->data;
+
+    if (timer_value == NULL) {
+        LOG_ERR("Timer value pointer is NULL");
+        return -EINVAL;
+    }
+    // increment the timer by 100 ms if the timer value is less than 1000 ms
+    if (data->timer_value < 1000) {
+        data->timer_value += 100;
+    } else { // if the timer value is greater or equal to 1000 ms, reset to 100ms
+        data->timer_value = 100;
+    }
+    
+    *timer_value = data->timer_value;
+
+    LOG_INF("Timer value set to %u", data->timer_value);
+    return 0;
+
+}
 
 static int our_driver_sample_fetch(const struct device *dev, enum sensor_channel chan)
 {
