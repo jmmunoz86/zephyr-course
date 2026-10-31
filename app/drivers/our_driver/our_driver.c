@@ -9,6 +9,8 @@ LOG_MODULE_REGISTER(our_driver, LOG_LEVEL_INF);
 
 struct our_driver_data {
     int led_state;
+    uint32_t timer_value;
+
 };
 
 struct our_driver_config {
