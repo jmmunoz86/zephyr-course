@@ -24,7 +24,7 @@ namespace {
 int main(void)
 {
     struct sensor_value val; 
-    uint32_t timer_value = 0;
+    uint32_t timer_value = 500;
 
     test();
     
@@ -33,29 +33,32 @@ int main(void)
         return -ENODEV;
     }
 
+    our_driver_set_timer(my_device, timer_value);
+
     while (1) {
-       int ret = sensor_sample_fetch(my_device);
-       if (ret < 0) {
-           LOG_ERR("Failed to fetch sensor sample: %d", ret);
-       }
+        int ret = sensor_sample_fetch(my_device);
+        if (ret < 0) {
+            LOG_ERR("Failed to fetch sensor sample: %d", ret);
+        }
 
-       ret = our_driver_set_timer_increment(my_device, &timer_value);
+        ret = our_driver_get_timer(my_device, &timer_value);
 
-       if (ret == 0) {
-           LOG_INF("Timer value incremented to: %u", timer_value);
+        if (ret == 0) {
+            LOG_INF("Timer value retrieved: %u", timer_value);
 
-       } else {
-           LOG_ERR("Failed to increment timer value: %d", ret);
-       }
+        } else {
+            LOG_ERR("Failed to retrieve timer value: %d", ret);
+            timer_value = 500; // Default to 500 ms if retrieval fails
+        }
 
-       k_msleep(timer_value);
+        k_msleep(timer_value);
 
-       ret = sensor_channel_get(my_device, SENSOR_CHAN_AMBIENT_TEMP, &val);
-       if (ret < 0) {
-           LOG_ERR("Failed to get sensor channel: %d", ret);
-       }
+        ret = sensor_channel_get(my_device, SENSOR_CHAN_AMBIENT_TEMP, &val);
+        if (ret < 0) {
+            LOG_ERR("Failed to get sensor channel: %d", ret);
+        }
 
-       k_msleep(timer_value);
+        k_msleep(timer_value);
     }
 
     

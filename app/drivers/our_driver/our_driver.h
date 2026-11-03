@@ -7,7 +7,9 @@
 extern "C" {
 #endif
 
-int our_driver_set_timer_increment(const struct device *dev, uint32_t *timer_value);
+int our_driver_get_timer(const struct device *dev, uint32_t *timer_value);
+int our_driver_set_timer(const struct device *dev, uint32_t timer_value);
+
 
 #ifdef __cplusplus
 }
